@@ -5,6 +5,9 @@ const boardElement=document.querySelector('.chessboard')
 let draggedPiece=null;
 let sourceSquare=null;
 let playerRole=null;
+document.getElementById("restartBtn").addEventListener("click", () => {
+    socket.emit("restartGame");
+});
 
 const renderBoard=()=>{
     const board=chess.board();
@@ -32,7 +35,7 @@ const renderBoard=()=>{
                         e.dataTransfer.setData('text/plain','');
                     }
                 });
-                pieceElement.addEventListener('dragged',(e)=>{
+                pieceElement.addEventListener('dragend', (e) => {
                     draggedPiece=null;
                     sourceSquare=null;
                 });
@@ -100,7 +103,7 @@ socket.on("boardState",function(fen){
     renderBoard();
 });
 socket.on("move",function(move){
-    chess.load(move);
+    chess.move(move);
     renderBoard();
 });
 renderBoard();

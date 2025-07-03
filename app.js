@@ -31,7 +31,11 @@ io.on('connection',function(uniqueSocket){
     }else{
         uniqueSocket.emit('spectatorRole')
     }
-
+     uniqueSocket.on("restartGame", () => {
+        chess.reset(); // Reset the board
+        io.emit("boardState", chess.fen()); // Send fresh board state to all
+        console.log("Game restarted");
+    });
     uniqueSocket.on('disconnect',function(){
         if(uniqueSocket.id===player.white){
             delete player.white;
@@ -59,7 +63,6 @@ io.on('connection',function(uniqueSocket){
     }));    
 
 });
-
 server.listen(3000,function(req,res){
     console.log('working')
 });
