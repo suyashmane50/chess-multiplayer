@@ -81,14 +81,18 @@ const renderBoard=()=>{
         boardElement.classList.remove("flipped")
     }
 };  
-const handleMove=(source,target)=>{
-    const move={
-        from:`${String.fromCharCode(97+source.col)}${8-source.row}`,
-        to:`${String.fromCharCode(97+target.col)}${8-target.row}`,
-        promotion:'q',
-    }
-    socket.emit("move",move);
-}
+const handleMove = (source, target) => {
+    // Don't send move if source and target are same
+    if (source.row === target.row && source.col === target.col) return;
+
+    const move = {
+        from: `${String.fromCharCode(97 + source.col)}${8 - source.row}`,
+        to: `${String.fromCharCode(97 + target.col)}${8 - target.row}`,
+        promotion: 'q',
+    };
+    socket.emit("move", move);
+};
+
 const getPieceUnicode=(piece)=>{
     const unicodePieces = {
     p: "♟",
