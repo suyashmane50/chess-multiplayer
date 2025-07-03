@@ -27,6 +27,23 @@ const renderBoard=()=>{
                 pieceElement.classList.add('piece',square.color==='w'?'white':'black');
                 pieceElement.innerText=getPieceUnicode(square);
                 pieceElement.draggable=playerRole===square.color;
+                pieceElement.addEventListener('touchstart', (e) => {
+                    draggedPiece = pieceElement;
+                    sourceSquare = { row: rowindex, col: squareindex };
+                    e.preventDefault(); // Prevent scroll
+                });
+
+                squareElement.addEventListener('touchend', (e) => {
+                    if (draggedPiece) {
+                        const targetSource = {
+                            row: parseInt(squareElement.dataset.row),
+                            col: parseInt(squareElement.dataset.col),
+                        };
+                        handleMove(sourceSquare, targetSource);
+                        draggedPiece = null;
+                        sourceSquare = null;
+                    }
+                });
 
                 pieceElement.addEventListener('dragstart',(e)=>{
                     if(pieceElement.draggable){
